@@ -9,7 +9,7 @@ import serial
 from tkinter import *
 
 
-arduinoData = serial.Serial('COM7', baudrate=1000000)  # Initialise....
+arduinoData = serial.Serial('COM7', baudrate=1000000)
 
 global tempDuration
 
@@ -25,14 +25,14 @@ def CurrentFrequency(frequency):
 
 def CurrentPRBS(prbs):
     prbsLookup = {'4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, '11': 11,
-    			 '12': 12, '13': 13, '14': 14}
+    		  '12': 12, '13': 13, '14': 14}
     prbs = prbsLookup[prbs]
     return str(prbs)
 
 
 def CurrentPeriod(period):
     periodLookup = {'1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, 
-    				'9': 9, '10': 10}
+    		    '9': 9, '10': 10}
     period = periodLookup[period] + periodOffset
     return str(period)
 
@@ -45,7 +45,7 @@ def tempDur():
 
 class DemoClass:
 
-		def __init__(self):
+	def __init__(self):
         self.window = Tk()
         self.window.title("PRBS Generator")
         self.window.geometry("400x275+500+50")
@@ -56,12 +56,10 @@ class DemoClass:
         self.frame.pack(pady=25, padx=25)
 
 # =============================================================
-        self.runB = Button(self.frame, activeforeground="green", text="Run Test",
-        					command=self.runTest)  #
+        self.runB = Button(self.frame, activeforeground="green", text="Run Test",command=self.runTest)  #
         self.runB.grid(row=7, column=3)  
 		
-        self.stopB = Button(self.frame, activeforeground="red", text="Stop Test",
-        					command=self.stopTest)  #
+        self.stopB = Button(self.frame, activeforeground="red", text="Stop Test",command=self.stopTest)  #
         self.stopB.grid(row=7, column=1) 
 
         self.label1 = Label(self.frame, text="PRBS bits")  #
@@ -101,8 +99,7 @@ class DemoClass:
         self.freqVar.set('10 kHz')  # set the default option
 
         # PRBS bit options
-        PRBSchoices = ('4', '5', '6', '7', '8', '9', '10', '11', '12', '13',
-        			  '14')
+        PRBSchoices = ('4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14')
         self.prbsVar.set('4')
 
         periodChoices = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
@@ -167,7 +164,7 @@ class DemoClass:
         print(transmitData)
 
     def timedFunction(self):
-		#Debugging function
+	#Debugging function
         print("I'm in a function that keeps rescheduling itself to be executed after 1 second!")
         self.window.after(1000, self.timedFunction)
 
