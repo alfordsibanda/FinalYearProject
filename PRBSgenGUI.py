@@ -1,72 +1,42 @@
 # Graphical User Interface
 # Pseudo Random Binary Sequence generator
-# Frequency - 10kHz, 15kHz, 20kHz
+# Frequency - 10kHz,.....,100kHz
 # Binary bits - 4...14
-
+# Duration - As long Arduino Nano can take in long variable, limited by delayMicroseconds (70 minute rollover)
 
 import time
+import serial
 from tkinter import *
 
-import serial
-
-# Code has to be cleaned and optimised.
 
 arduinoData = serial.Serial('COM7', baudrate=1000000)  # Initialise....
 
-FreqOffset = 100000
-PRBSOffset = 10
-periodOffset = 10
 global tempDuration
 
-def CurrentState(self, frequency, prbs):
-    freqLookup = {'10 kHz': 10000, '15 kHz': 15000, '20 kHz': 20000}
-    prbsLookup = {'4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, '13': 13, '14': 14}
-
-    currFreq = freqLookup[frequency];
-    currPRBS = prbsLookup[prbs];
-
-    print('Frequency: ', currFreq)
-    print('PRBS bits: ', currPRBS)
-
-
 def CurrentFrequency(frequency):
-    # freqLookup = {'10 kHz': 10000, '15 kHz': 15000, '20 kHz': 20000, '25 kHz': 25000}
     freqLookup = {'10 kHz': 10000, '15 kHz': 15000, '20 kHz': 20000, '25 kHz': 25000,
                   '30 kHz': 30000, '35 kHz': 35000, '40 kHz': 40000, '45 kHz': 45000,
                   '50 kHz': 50000, '55 kHz': 55000, '60 kHz': 60000, '65 kHz': 65000,
                   '70 kHz': 70000, '75 kHz': 75000, '80 kHz': 80000, '85 kHz': 85000,
                   '90 kHz': 90000, '95 kHz': 95000, '100 kHz': 100000}
-    # freq = freqLookup[frequency] + FreqOffset
     freq = freqLookup[frequency]
     return str(freq)
 
 
 def CurrentPRBS(prbs):
-    # Offset by turn to get around serial issues of reading bytes
-    # prbsLookup = {'4': 14, '5': 15, '6': 16, '7': 17, '8': 18, '9': 19, '10': 20, '11': 21, '12': 22, '13': 23, '14': 24}
-    prbsLookup = {'4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, '13': 13, '14': 14}
-    # prbs = prbsLookup[prbs] + PRBSOffset
+    prbsLookup = {'4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, '11': 11,
+    			 '12': 12, '13': 13, '14': 14}
     prbs = prbsLookup[prbs]
     return str(prbs)
 
 
 def CurrentPeriod(period):
-    periodLookup = {'1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10}
+    periodLookup = {'1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, 
+    				'9': 9, '10': 10}
     period = periodLookup[period] + periodOffset
     return str(period)
 
-
-def validate(self, action, index, value_if_allowed, prior_value, text, validation_type, trigger_type):
-    if text in '0123456789.-+':
-        try:
-            float(value_if_allowed)
-            return True
-        except ValueError:
-            return False
-    else:
-        return False
-
-
+	
 def tempDur():
     global tempDuration
     X = tempDuration
@@ -75,7 +45,7 @@ def tempDur():
 
 class DemoClass:
 
-    def __init__(self):
+		def __init__(self):
         self.window = Tk()
         self.window.title("PRBS Generator")
         self.window.geometry("400x275+500+50")
@@ -85,18 +55,14 @@ class DemoClass:
         self.frame.rowconfigure(0, weight=1)
         self.frame.pack(pady=25, padx=25)
 
-        # =============================================================
-        # self.button1 = Button(self.frame, text="Frequency", command=self.frequency) #
-        # self.button1.grid(row=5, column=1) #, font=self.customFont)
-
-        # self.button2 = Button(self.frame, text="PRBS", command=self.prbs) #
-        # self.button2.grid(row=5, column=2) #, font=self.customFont)
-
-        self.runB = Button(self.frame, activeforeground="green", text="Run Test", command=self.runTest)  #
-        self.runB.grid(row=7, column=3)  # , font=self.customFont)
-
-        self.stopB = Button(self.frame, activeforeground="red", text="Stop Test", command=self.stopTest)  #
-        self.stopB.grid(row=7, column=1)  # , font=self.customFont)
+# =============================================================
+        self.runB = Button(self.frame, activeforeground="green", text="Run Test",
+        					command=self.runTest)  #
+        self.runB.grid(row=7, column=3)  
+		
+        self.stopB = Button(self.frame, activeforeground="red", text="Stop Test",
+        					command=self.stopTest)  #
+        self.stopB.grid(row=7, column=1) 
 
         self.label1 = Label(self.frame, text="PRBS bits")  #
         self.label1.grid(row=2, column=1)
@@ -116,19 +82,17 @@ class DemoClass:
         self.labelY = Label(self.frame, text=" ")  #
         self.labelY.grid(row=6, column=1)
 
-        # =============================================================
+# =============================================================
 
         # self.window.after(1000, self.timedFunction)
         # self.window.mainloop()
 
-        # =============================================================
-        # Create a tkinter variable
+# =============================================================
         self.freqVar = StringVar(self.frame)
         self.prbsVar = StringVar(self.frame)
         self.periodsVar = StringVar(self.frame)
 
         # Frequency options
-        # frequencyChoices = ('10 kHz', '15 kHz', '20 kHz')
         frequencyChoices = ('10 kHz', '15 kHz', '20 kHz', '25 kHz',
                             '30 kHz', '35 kHz', '40 kHz', '45 kHz',
                             '50 kHz', '55 kHz', '60 kHz', '65 kHz',
@@ -137,7 +101,8 @@ class DemoClass:
         self.freqVar.set('10 kHz')  # set the default option
 
         # PRBS bit options
-        PRBSchoices = ('4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14')
+        PRBSchoices = ('4', '5', '6', '7', '8', '9', '10', '11', '12', '13',
+        			  '14')
         self.prbsVar.set('4')
 
         periodChoices = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')
@@ -149,17 +114,14 @@ class DemoClass:
         popupMenu2 = OptionMenu(self.frame, self.freqVar, *frequencyChoices)
         popupMenu2.grid(row=3, column=2)
 
-        # popupMenu3 = OptionMenu(self.frame, self.periodsVar, *periodChoices)
-        # popupMenu3.grid(row=3, column=3)
         self.EntryField1 = Entry(self.frame, width=8)
         self.EntryField1.grid(row=3, column=3)
-        # =============================================================
+# =============================================================
 
         tempDur = self.EntryField1.get()
         durButton = Button(self.frame, text='Set', command=self.processDuration)
-        # durButton = Button(self.frame, text='Set', command=self.setDuration())
         durButton.grid(row=4, column=3)
-        # =============================================================
+# =============================================================
 
         self.DateLabel = Label(self.frame, text="")
         self.DateLabel.grid(row=0, column=1, columnspan=3)
@@ -169,7 +131,7 @@ class DemoClass:
         self.update_clock()
         self.window.mainloop()
 
-    # =====================Clock===================================
+# =====================Clock===================================
 
     def update_clock(self):
         now = time.strftime("%H:%M:%S")
@@ -179,32 +141,13 @@ class DemoClass:
         self.window.after(1000, self.update_clock)
 
     # =============================================================
-    def frequency(self):
-        # TEST: Transmitting data
-        # arduinoData.write(b'1')
-        # sampFreq = CurrentFrequency(self.freqVar.get())
-        # arduinoData.write(self.freqVar.get().encode())
-        # arduinoData.write(CurrentFrequency(self.freqVar.get()))
-        # arduinoData.write(sampFreq.encode())
-        # print("value is", self.freqVar.get())
-        # print("Frequency is", sampFreq)
-        print("Start Transmit")
-
-    def prbs(self):
-        # TEST: Transmitting data
-        # prbsL = CurrentPRBS(self.prbsVar.get())
-        # print("value is", self.prbsVar.get())
-        # arduinoData.write(prbsL.encode())
-        print("Stop Transmit")
-
     def processDuration(self):
         print('Testing Duration Entry')
         global tempDuration
         tempDuration = self.EntryField1.get()
-        # Duration = dur
         self.CurrentSetDuration.configure(text="Set Duration is: " + tempDuration + " ms")
         print('Temp Duration = ', tempDuration)
-        print('Duration = NULL')
+		
 
     def stopTest(self):
         stopTest = 'x'
@@ -224,8 +167,8 @@ class DemoClass:
         print(transmitData)
 
     def timedFunction(self):
+		#Debugging function
         print("I'm in a function that keeps rescheduling itself to be executed after 1 second!")
         self.window.after(1000, self.timedFunction)
-
 
 instance = DemoClass()
