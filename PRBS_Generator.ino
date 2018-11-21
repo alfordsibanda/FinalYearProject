@@ -1,23 +1,5 @@
-//https://arduino.stackexchange.com/questions/37387/can-i-make-delaymicroseconds-more-accurate
-#include <util/delay.h>
-//_delay_us(tSamp2);
-char serialData[10];
-boolean toggle = false; // To toggle the clock pin
-
 long toMicro = 1000000;
-long FreqOffset = 100000;
-int PRBSOffset = 10;
-int periodOffset = 10;
 
-int PRBS = 10;
-int notPRBS = 11;
-int CLOCK = 6;
-/*
-char bufferCMD[1];
-char bufferFREQ[5];
-char bufferPRBS[2];
-
-*/
 int CMD;
 long frequency;
 long duration;
@@ -25,7 +7,6 @@ double period;
 int PRBSbits;
 int periodLen;
 
-// https://blog.kurttomlinson.com/posts/prbs-pseudo-random-binary-sequence
 // PRBS Polynomials
 int polynomial[] = {
   0b1100, /* PRBS4: x^4 + x^3 + 1 */
